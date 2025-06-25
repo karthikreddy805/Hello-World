@@ -1,4 +1,5 @@
-name: Java CI with Maven
+name: name: Build, Test, and Deploy to ECR
+
 
 on:
   push:
