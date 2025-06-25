@@ -5,7 +5,7 @@ FROM openjdk:8-jdk-alpine
 WORKDIR /app
 
 # Copy the built JAR file into the container
-COPY target/simple-java-project-1.0-SNAPSHOT.jar app.jar
+COPY target/simple-java-project-1.0-SNAPSHOT-jar-with-dependencies.jar app.jar
 
 # Use ENTRYPOINT to run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
