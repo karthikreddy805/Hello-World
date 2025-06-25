@@ -24,6 +24,12 @@ jobs:
     - name: List target directory (debugging)
       run: ls -l target
 
+    - name: Upload JAR as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: built-jar
+        path: target/*.jar
+
   ecr-deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -31,6 +37,12 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
+
+    - name: Download JAR artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: built-jar
+        path: target
 
     - name: Set Environment Variables Based on Branch
       uses: ./.github/set-env-by-branch
@@ -57,5 +69,6 @@ jobs:
         echo "Using ECR repo: $AWS_ECR_REPOSITORY_NAME"
         IMAGE_URI="$ECR_REGISTRY/$AWS_ECR_REPOSITORY_NAME:$IMAGE_TAG"
         echo "Building Docker image: $IMAGE_URI"
+        ls -l target
         docker build -t "$IMAGE_URI" .
         docker push "$IMAGE_URI"
