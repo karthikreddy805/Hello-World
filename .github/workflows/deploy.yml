@@ -30,7 +30,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set Environment Variables Based on Branch
-      uses: ./.github/actions/set-env-by-branch
+      uses: ./.github/set-env-by-branch
       with:
         branch: ${{ github.ref_name }}
 
