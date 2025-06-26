@@ -2,8 +2,11 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ main ]
-
+    branches: 
+      - main
+      - spinco-dev
+      - spinco-staging 
+      
 jobs:
   build:
     runs-on: ubuntu-latest
