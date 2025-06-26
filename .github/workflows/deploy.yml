@@ -5,7 +5,7 @@ on:
     branches: 
       - main
       - spinco-dev
-      - spinco-staging 
+      - spinco-staging
       
 jobs:
   build:
@@ -33,7 +33,7 @@ jobs:
         name: built-jar
         path: target/*.jar
 
-  ecr-deploy:
+  docker:
     needs: build
     runs-on: ubuntu-latest
 
@@ -67,7 +67,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: lat
+        IMAGE_TAG: ${{ github.ref_name }}
       run: |
         echo "Using ECR repo: $AWS_ECR_REPOSITORY_NAME"
         IMAGE_URI="$ECR_REGISTRY/$AWS_ECR_REPOSITORY_NAME:$IMAGE_TAG"
@@ -75,3 +75,37 @@ jobs:
         ls -l target
         docker build -t "$IMAGE_URI" .
         docker push "$IMAGE_URI"
+
+#  ecs-deploy:
+#    needs: docker
+#    runs-on: ubuntu-latest
+
+#    steps:
+#    - name: Register updated ECS Task Definition
+#      id: task-def
+#      env:
+#        TASK_FAMILY: ${{ env.SERVICE_NAME }}
+#        ECR_URI: ${{ env.ECR_REGISTRY }}/${{ env.AWS_ECR_REPOSITORY_NAME }}
+#        IMAGE_TAG: ${{ github.ref_name }}
+#      run: |
+#        echo "Preparing new ECS task definition..."
+#        IMAGE="$ECR_URI:$IMAGE_TAG"
+#        echo "New image: $IMAGE"
+
+        # Get the current task definition
+ #       NEW_DEF=$(aws ecs describe-task-definition --task-definition $TASK_FAMILY)
+
+        # Update the container image using jq and save it as task-def.json
+ #       echo "$NEW_DEF" | jq --arg IMAGE "$IMAGE" '
+ #         .taskDefinition.containerDefinitions[0].image = $IMAGE |
+ #         {family: .taskDefinition.family, containerDefinitions: .taskDefinition.containerDefinitions}
+ #       ' > task-def.json
+
+  #      echo "✅ task-def.json created"
+
+ #   - name: Deploy to ECS
+ #     uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+  #    with:
+ #       task-definition: task-def.json
+ #       service: ${{ env.SERVICE_NAME }}
+  #      cluster: ${{ env.CLUSTER_NAME }}
