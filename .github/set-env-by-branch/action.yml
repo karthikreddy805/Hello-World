@@ -10,12 +10,12 @@ runs:
     - run: |
         echo "Branch: ${{ inputs.branch }}"
         BRANCH_NAME=$(echo "${{ inputs.branch }}" | tr '[:upper:]' '[:lower:]')
-        if [[ "$BRANCH_NAME" == "dev" ]]; then
-          echo "CI_ENVIRONMENT_NAME=dev" >> $GITHUB_ENV
-          echo "AWS_ECR_REPOSITORY_NAME=dev" >> $GITHUB_ENV
-        elif [[ "$BRANCH_NAME" == "staging" ]]; then
-          echo "CI_ENVIRONMENT_NAME=staging" >> $GITHUB_ENV
-          echo "AWS_ECR_REPOSITORY_NAME=staging" >> $GITHUB_ENV
+        if [[ "$BRANCH_NAME" == "spinco-dev" ]]; then
+          echo "CI_ENVIRONMENT_NAME=spinco-dev" >> $GITHUB_ENV
+          echo "AWS_ECR_REPOSITORY_NAME=spinco-dev" >> $GITHUB_ENV
+        elif [[ "$BRANCH_NAME" == "spinco-staging" ]]; then
+          echo "CI_ENVIRONMENT_NAME=spinco-staging" >> $GITHUB_ENV
+          echo "AWS_ECR_REPOSITORY_NAME=spinco-staging" >> $GITHUB_ENV
         else
           echo "CI_ENVIRONMENT_NAME=default" >> $GITHUB_ENV
           echo "AWS_ECR_REPOSITORY_NAME=node.js" >> $GITHUB_ENV
